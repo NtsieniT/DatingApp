@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using DatingApp.API.Data;
+using DatingApp.API.Models;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -12,6 +15,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 
 namespace DatingApp.API
 {
@@ -32,6 +36,26 @@ namespace DatingApp.API
             //services.AddDbContext<DataContext>(x => x.UseSqlite("Connection String")); //Uncomment this if you are using sqlite and configure connection string in the appsettings 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddCors();
+
+            /// AddSingleton Service is  Create a single instance of our repository for the first time, and reuse the same object in all course.
+            //services.AddSingleton<IAuthRepository,AuthRepository>(); 
+
+            /// AddTransient Service is  Created each time a request comes, a new instance is created. (for lightweight stateless services) 
+            //services.AddTransient<IAuthRepository,AuthRepository>(); 
+
+            /// AddScoped Service is created once per request within the scope for each HTTP request.
+            services.AddScoped<IAuthRepository,AuthRepository>();
+
+            // configure application authentication scheme
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(
+                options => options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(Configuration.GetSection("AppSettings:Token").Value)),
+                    ValidateIssuer = false,
+                    ValidateAudience = false
+
+                });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -48,6 +72,7 @@ namespace DatingApp.API
 
             app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
             //app.UseHttpsRedirection();
+            app.UseAuthentication();
             app.UseMvc();
         }
     }
