@@ -13,7 +13,7 @@ export class ErrorInterceptor implements HttpInterceptor {
             catchError(error => {
                 if (error instanceof HttpErrorResponse){
 
-                    // Check is user is authorized
+                    // Check is user is
                     if (error.status === 401){
                         return throwError(error.statusText);
                     }
