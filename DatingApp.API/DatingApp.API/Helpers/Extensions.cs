@@ -25,5 +25,16 @@ namespace DatingApp.API.Helpers
             // To allow cross origin between application eg angular from any origin
             response.Headers.Add("Access-Control-Allow-Origin", "*");
         }
+
+        // Crating an extension method to calcilate date
+        public static int CalculateAge(this DateTime dateTime)
+        {
+            var age = DateTime.Today.Year - dateTime.Year;
+            if (dateTime.AddYears(age) > DateTime.Today)
+            {
+                age--;
+            }
+            return age;
+        }
     }
 }

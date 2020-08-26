@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using AutoMapper;
 using DatingApp.API.Data;
 using DatingApp.API.Helpers;
 using DatingApp.API.Models;
@@ -38,8 +39,14 @@ namespace DatingApp.API
            services.AddDbContext<DataContext>(x => 
            x.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             //services.AddDbContext<DataContext>(x => x.UseSqlite("Connection String")); //Uncomment this if you are using sqlite and configure connection string in the appsettings 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
+                .AddJsonOptions(options =>
+                {
+                    // Ignores self referencing looping sincne we getting users-photos and users again.
+                    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+                });
             services.AddCors();
+            services.AddAutoMapper();
 
             /// AddSingleton Service is  Create a single instance of our repository for the first time, and reuse the same object in all course.
             //services.AddSingleton<IAuthRepository,AuthRepository>(); 
@@ -49,6 +56,8 @@ namespace DatingApp.API
 
             /// AddScoped Service is created once per request within the scope for each HTTP request.
             services.AddScoped<IAuthRepository,AuthRepository>();
+            services.AddScoped<IDatingRepository, DatingRepository>();
+            services.AddTransient<Seed>();
 
             // configure application authentication scheme
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(
@@ -63,7 +72,7 @@ namespace DatingApp.API
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, Seed seeder)
         {
             if (env.IsDevelopment())
             {
@@ -88,6 +97,7 @@ namespace DatingApp.API
                 }));
             }
 
+            //seeder.SeedUsers();
             app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
             //app.UseHttpsRedirection();
             app.UseAuthentication();
