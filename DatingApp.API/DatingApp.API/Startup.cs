@@ -79,6 +79,7 @@ namespace DatingApp.API
                 app.UseDeveloperExceptionPage();
             }
             else
+            
             {
                 //app.UseHsts();
 

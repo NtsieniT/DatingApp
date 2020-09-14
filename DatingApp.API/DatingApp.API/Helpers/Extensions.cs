@@ -26,10 +26,11 @@ namespace DatingApp.API.Helpers
             response.Headers.Add("Access-Control-Allow-Origin", "*");
         }
 
-        // Crating an extension method to calcilate date
+        // Creating an extension method to calcilate date
         public static int CalculateAge(this DateTime dateTime)
         {
             var age = DateTime.Today.Year - dateTime.Year;
+            //this checks if the person has had their birthday or not
             if (dateTime.AddYears(age) > DateTime.Today)
             {
                 age--;

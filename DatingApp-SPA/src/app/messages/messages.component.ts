@@ -9,6 +9,7 @@ export class MessagesComponent implements OnInit {
 
   constructor() { }
 
+  // tslint:disable-next-line:typedef
   ngOnInit() {
   }
 
