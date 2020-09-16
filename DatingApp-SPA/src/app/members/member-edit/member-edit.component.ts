@@ -23,6 +23,7 @@ export class MemberEditComponent implements OnInit {
   // HostListener listens to the browser and take an actions based on something happening on the browser
   @HostListener('window: BeforeUnloadEvent', ['$event'])
 
+  // tslint:disable-next-line:typedef
   unloadNotification($event: any){
     if (this.editForm.dirty){
       $event.returnValue = true;
@@ -34,12 +35,14 @@ export class MemberEditComponent implements OnInit {
   constructor(private route: ActivatedRoute, private alertify: AlertifyService,
               private userService: UserService, private authService: AuthService) { }
 
+  // tslint:disable-next-line:typedef
   ngOnInit() {
     this.route.data.subscribe(data => {
       this.user = data.user;
-    })
+    });
   }
 
+  // tslint:disable-next-line:typedef
   updateUser(){
     this.userService.updateUser(this.authService.decodedToken.nameid, this.user).subscribe(next => {
       this.alertify.success('Profile updated successfully');

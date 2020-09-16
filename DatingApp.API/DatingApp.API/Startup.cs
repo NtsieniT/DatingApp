@@ -48,6 +48,9 @@ namespace DatingApp.API
             services.AddCors();
             services.AddAutoMapper();
 
+            // Register configurations for cloudinary and read settings from appSettings
+            services.Configure<CloudinarySettings>(Configuration.GetSection("CloudinarySettings"));
+
             /// AddSingleton Service is  Create a single instance of our repository for the first time, and reuse the same object in all course.
             //services.AddSingleton<IAuthRepository,AuthRepository>(); 
 

@@ -18,5 +18,6 @@ namespace DatingApp.API.Data
         Task<bool> SaveAll();//save all if there are more then 1 data to save
         Task<IEnumerable<User>> GetUsers(); // Gets all users
         Task<User> GetUser(int id); // Get an individual user
+        Task<Photo> GetPhoto(int id);
     }
 }

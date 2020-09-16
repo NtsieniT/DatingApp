@@ -23,7 +23,7 @@ namespace DatingApp.API.Data
         public void Delete<T>(T entity) where T : class
         {
             _context.Remove(entity);
-        }
+        }   
 
         public async Task<User> GetUser(int id)
         {
@@ -44,6 +44,12 @@ namespace DatingApp.API.Data
         {
             // The return statement returns true if something was saved to the DB else returns false
             return await _context.SaveChangesAsync() > 0;
+        }
+
+        public async Task<Photo> GetPhoto(int id)
+        {
+            var photo = await _context.Photos.FirstOrDefaultAsync(p => p.Id == id);
+            return photo;
         }
     }
 }

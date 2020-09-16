@@ -9,6 +9,7 @@ namespace DatingApp.API.Models
         public string Description { get; set; }
         public DateTime DateAdded { get; set; }
         public bool IsMain { get; set; }
+        public string  PublicId { get; set; }
 
         // Adding user model in the photo class , entity framework adds/creates
         // a cascade delete in the migrations instead of restricted delete.
