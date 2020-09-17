@@ -19,6 +19,7 @@ export class MemberEditComponent implements OnInit {
   @ViewChild('editForm') editForm: NgForm;
 
   user: User;
+  photoUrl: string;
 
   // HostListener listens to the browser and take an actions based on something happening on the browser
   @HostListener('window: BeforeUnloadEvent', ['$event'])
@@ -40,6 +41,7 @@ export class MemberEditComponent implements OnInit {
     this.route.data.subscribe(data => {
       this.user = data.user;
     });
+    this.authService.currentPhotoUrl.subscribe(photoUrl => this.photoUrl = photoUrl)
   }
 
   // tslint:disable-next-line:typedef
@@ -52,9 +54,11 @@ export class MemberEditComponent implements OnInit {
         this.alertify.error(error);
       }
     );
+  }
 
+  updateMainPhoto(photoUrl){
 
-
+    this.user.photoUrl = photoUrl;
 
   }
 

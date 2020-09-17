@@ -12,6 +12,7 @@ import { TabsModule } from 'ngx-bootstrap/tabs';
 import { RouterModule } from '@angular/router';
 import { JwtModule } from '@auth0/angular-jwt';
 import { NgxGalleryModule } from '@kolkov/ngx-gallery';
+import { FileUploadModule } from 'ng2-file-upload';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -32,6 +33,7 @@ import { MemberEditComponent } from './members/member-edit/member-edit.component
 import { MemberDetailResolver } from './_resolvers/member-detail.resolver';
 import { MemberDetailComponent } from './members/member-detail/member-detail.component';
 import { PhotoEditorComponent } from './members/photo-editor/photo-editor.component';
+
 
 // This library provides an HttpInterceptor which automatically attaches a JSON Web Token to HttpClient requests.
 // The httpOptions is used to pass the token to our Api to be able to get access
@@ -70,7 +72,8 @@ export function tokenGetter(): any {
             disallowedRoutes: ['localhost:5000/auth'],
           },
       }),
-      NgxGalleryModule
+      NgxGalleryModule,
+      FileUploadModule
    ],
    providers: [
       AuthService,

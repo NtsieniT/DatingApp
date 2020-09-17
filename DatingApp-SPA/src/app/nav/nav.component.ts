@@ -13,9 +13,11 @@ export class NavComponent implements OnInit {
 
   model: any = {}; // used to pass data/fields from our template to the model as objects.
 
+  photoUrl: string;
   constructor(public authService: AuthService, private alertify: AlertifyService, private router: Router) { }
 
   ngOnInit() {
+    this.authService.currentPhotoUrl.subscribe(photoUrl => this.photoUrl = photoUrl);
   }
 
   login(): any {
@@ -39,6 +41,9 @@ export class NavComponent implements OnInit {
   logout()
   {
     localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    this.authService.decodedToken = null;
+    this.authService.currentUser = null;
     this.alertify.message('Logged out');
     this.router.navigate(['/home']);
   }

@@ -105,6 +105,104 @@ namespace DatingApp.API.Controllers
 
             return BadRequest("Could not add the photo");
         }
+
+        [HttpPost("{id}/setMain")]
+        public async Task<IActionResult> SetMainPhoto(int userId, int id)
+        {
+            if (userId != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value))
+                return Unauthorized();
+            // check if id matches id of the user in the repository
+
+            var user = await _repo.GetUser(userId);
+
+            // make sure photo exists in the photos collection
+            if (!user.Photos.Any(predicate => predicate.Id == id))
+            {
+                // if id does not match any of the photos id collection, return unauthorized
+                return Unauthorized();
+            }
+
+            var photoFromRepo = await _repo.GetPhoto(id);
+
+            // Check if the photo is the main photo
+            if (photoFromRepo.IsMain)
+            {
+                return BadRequest("This is already the main photo");
+            }
+
+            // Get Current photo which is set to the main photo
+            var currentMainPhoto = await _repo.GetMainPhotoForUser(userId);
+
+            // Set the photo to false changing it not to be the main photo
+            currentMainPhoto.IsMain = false;
+
+            // set the new uploaded photo to be the main photo
+            photoFromRepo.IsMain = true;
+
+            // Save all changes in the database
+            if (await _repo.SaveAll())
+            {
+                return NoContent();
+            }
+            return BadRequest("Could not set photo to main");
+
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeletePhoto(int userId, int id)
+        {
+
+            if (userId != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value))
+                return Unauthorized();
+            // check if id matches id of the user in the repository
+
+            var user = await _repo.GetUser(userId);
+
+            // make sure photo exists in the photos collection
+            if (!user.Photos.Any(predicate => predicate.Id == id))
+            {
+                // if id does not match any of the photos id collection, return unauthorized
+                return Unauthorized();
+            }
+
+            var photoFromRepo = await _repo.GetPhoto(id);
+
+            // Check if the photo is the main photo
+            if (photoFromRepo.IsMain)
+            {
+                return BadRequest("You cannot delete your main photo");
+            }
+
+            // Check if photo from repository has a public Id
+            if (photoFromRepo.PublicId != null)
+            {
+                // Generate params to delete on cloudinary
+                var deleteParams = new DeletionParams(photoFromRepo.PublicId);
+
+                var results = _cloudinary.Destroy(deleteParams);
+
+                if (results.Result == "ok")
+                {
+                    _repo.Delete(photoFromRepo);
+                }
+
+            }
+
+            if (photoFromRepo.PublicId == null)
+            {
+                _repo.Delete(photoFromRepo);
+            }
+          
+
+            if (await _repo.SaveAll())
+            {
+                return Ok();
+            }
+
+            return BadRequest("failed to delete the photo");
+
+
+        }
       
     }
 }
