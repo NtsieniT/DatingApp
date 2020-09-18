@@ -26,11 +26,11 @@ export class AuthService {
 
 constructor(private http: HttpClient) { }
 
-changeMemberPhoto(photoUrl: string){
+changeMemberPhoto(photoUrl: string): any{
   this.photoUrl.next(photoUrl);
 }
 
-login(model: any)
+login(model: any): any
 {
   // pipe allows us to chain rsjx operators to our request.
   return this.http.post(this.baseUrl + 'login', model)
@@ -47,19 +47,19 @@ login(model: any)
 
           this.decodedToken = this.jwtHelper.decodeToken(user.token);
           this.currentUser = user.user;
-          this.changeMemberPhoto(this.currentUser.photoUrl)
+          this.changeMemberPhoto(this.currentUser.photoUrl);
         }
       })
     );
 }
 
-register(model: any)
+register(user: User): any
 {
-  return this.http.post(this.baseUrl + 'register', model);
+  return this.http.post(this.baseUrl + 'register', user);
 
 }
 
-loggedIn() {
+loggedIn(): any {
   const token = localStorage.getItem('token');
   return !this.jwtHelper.isTokenExpired(token); // return if token is not expired
 }

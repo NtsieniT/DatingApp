@@ -11,9 +11,9 @@
   <div *ngIf="registerMode" class="container">
     <div class="row justify-content-center">
       <div class="col-4">
-        <!-- valuesFromHome]="values" passes values to a child component
-         valuesFromHome is a property-->
-        <!-- <app-register [valuesFromHome]="values" (cancelRegister)="cancelRegisterMode($event)"></app-register> -->
+        <!-- [valuesFromHome]="values" passes values to a child component from parent component
+         valuesFromHome is an @Input property-->
+         <app-register (cancelRegister)="cancelRegisterMode($event)"></app-register> 
       </div>
     </div>
   </div>

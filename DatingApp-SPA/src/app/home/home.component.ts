@@ -11,14 +11,14 @@ registerMode = false;
 // values: any;
   constructor(private http: HttpClient) { }
 
-  ngOnInit() {
+  ngOnInit(): any {
    // this.getValues();
   }
-registerToggle(){
+registerToggle(): any{
   this.registerMode = true;
 }
 
-cancelRegisterMode(registerMode: boolean)
+cancelRegisterMode(registerMode: boolean): any
 {
  this.registerMode = registerMode;
 }
