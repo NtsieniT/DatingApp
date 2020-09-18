@@ -43,7 +43,7 @@ login(model: any): any
           localStorage.setItem('token', user.token);
 
           // use JSON.stringify to convert object to string
-          localStorage.setItem('user', JSON.stringify(user.User));
+          localStorage.setItem('user', JSON.stringify(user.user));
 
           this.decodedToken = this.jwtHelper.decodeToken(user.token);
           this.currentUser = user.user;
