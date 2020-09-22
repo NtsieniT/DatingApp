@@ -34,13 +34,26 @@ import { MemberEditComponent } from './members/member-edit/member-edit.component
 import { MemberDetailResolver } from './_resolvers/member-detail.resolver';
 import { MemberDetailComponent } from './members/member-detail/member-detail.component';
 import { PhotoEditorComponent } from './members/photo-editor/photo-editor.component';
+import {TimeAgoPipe} from 'time-ago-pipe';
+import {Pipe, PipeTransform} from '@angular/core';
 
+@Pipe({
+   name: 'timeAgo',
+   pure: false
+ })
+ export class TimeAgoExtendsPipePipe extends TimeAgoPipe implements PipeTransform {
+
+   transform(value: string): string {
+     return super.transform(value);
+   }
+ }
 
 // This library provides an HttpInterceptor which automatically attaches a JSON Web Token to HttpClient requests.
 // The httpOptions is used to pass the token to our Api to be able to get access
 
 export function tokenGetter(): any {
    return localStorage.getItem('token');
+
 }
 
 @NgModule({
@@ -55,7 +68,8 @@ export function tokenGetter(): any {
       MemberCardComponent,
       MemberDetailComponent,
       MemberEditComponent,
-      PhotoEditorComponent
+      PhotoEditorComponent,
+      TimeAgoExtendsPipePipe
    ],
    imports: [
       BrowserModule,
