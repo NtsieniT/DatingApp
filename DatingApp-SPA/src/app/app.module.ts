@@ -36,6 +36,8 @@ import { MemberDetailComponent } from './members/member-detail/member-detail.com
 import { PhotoEditorComponent } from './members/photo-editor/photo-editor.component';
 import {TimeAgoPipe} from 'time-ago-pipe';
 import {Pipe, PipeTransform} from '@angular/core';
+import { PaginationModule } from 'ngx-bootstrap/pagination';
+import { ButtonsModule } from 'ngx-bootstrap/buttons';
 
 @Pipe({
    name: 'timeAgo',
@@ -89,6 +91,8 @@ export function tokenGetter(): any {
             disallowedRoutes: ['localhost:5000/auth'],
           },
       }),
+      PaginationModule.forRoot(),
+      ButtonsModule.forRoot(),
       NgxGalleryModule,
       FileUploadModule
    ],
